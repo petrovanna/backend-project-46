@@ -37,12 +37,16 @@ const genDiff = (obj1, obj2) => {
     return(stringResultWithoutQuotes.replaceAll(',', ''));
 }; // gendiff files/file1.json files/file2.json  gendiff file1.json file2.json
 
+const readFile = (filePath) => {
+    const fullPath = path.resolve(process.cwd(), 'files', filePath);
+    const data = readFileSync(fullPath, 'utf-8');
+    const dataParse = JSON.parse(data);
+    return dataParse;
+};
+
 export default (filepath1, filepath2) => {
-    const data1 = readFileSync(path.resolve(process.cwd(), 'files', filepath1), 'utf-8');
-    const data2 = readFileSync(path.resolve(process.cwd(), 'files', filepath2), 'utf-8');
+    const data1 = readFile(filepath1);
+    const data2 = readFile(filepath2);
     
-    const data1Parse = JSON.parse(data1);
-    const data2Parse = JSON.parse(data2);
-    
-    return genDiff(data1Parse, data2Parse);
+    return genDiff(data1, data2);
 };
