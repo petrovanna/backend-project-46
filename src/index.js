@@ -9,8 +9,10 @@ const genDiff = (obj1, obj2) => {
   const uniqeKeys = _.union(unitedKeys);
   const sortedKeys = _.sortBy(uniqeKeys, [uniqeKeys.key]);
 
+  console.log('1)', sortedKeys);
   const result = {};
-  for (const key of sortedKeys) {
+
+  sortedKeys.map((key) => {
     if (!Object.hasOwn(obj2, key)) {
       result[` - ${key}`] = obj1[key];
     }
@@ -28,11 +30,14 @@ const genDiff = (obj1, obj2) => {
         result[`   ${key}`] = obj1[key];
       }
     }
-  }
+    return result;
+  });
+  console.log('2)', result);
+
   const stringResult = JSON.stringify(result, null, ' ');
   const stringResultWithoutQuotes = stringResult.replaceAll('"', '');
   return (stringResultWithoutQuotes.replaceAll(',', ''));
-}; // gendiff files/file1.json files/file2.json  gendiff file1.json file2.json
+}; // gendiff file1.json file2.json
 
 const readFile = (filePath) => {
   const fullPath = path.resolve(process.cwd(), 'files', filePath);
