@@ -40,7 +40,7 @@ const genDiff = (obj1, obj2) => {
 }; // gendiff file1.json file2.json
 
 const readFile = (filePath) => {
-  const fullPath = path.resolve(process.cwd(), 'files', filePath);
+  const fullPath = path.resolve(process.cwd(), '__fixtures__', filePath);
   const data = readFileSync(fullPath, 'utf-8');
   const dataParse = JSON.parse(data);
   return dataParse;
