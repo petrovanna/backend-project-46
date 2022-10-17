@@ -4,7 +4,7 @@
 ### GitHub Actions:
 [![Linter/Tests](https://github.com/petrovanna/backend-project-46/workflows/Linter/Tests/badge.svg)](https://github.com/petrovanna/backend-project-46/actions/workflows/lint.yml)
 
-### CodeClimate Maintainability status:
+### Code Coverage:
 [![Maintainability](https://api.codeclimate.com/v1/badges/0995670fc75577b98ce4/maintainability)](https://codeclimate.com/github/petrovanna/backend-project-46/maintainability)
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0995670fc75577b98ce4/test_coverage)](https://codeclimate.com/github/petrovanna/backend-project-46/test_coverage)
