@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/petrovanna/backend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/petrovanna/backend-project-46/actions)
 
 ### GitHub Actions:
-[![Linter/Tests](https://github.com/petrovanna/backend-project-46/workflows/Linter/badge.svg)](https://github.com/petrovanna/backend-project-46/actions/workflows/lint.yml)
+[![Linter/Tests](https://github.com/petrovanna/backend-project-46/workflows/Linter/Tests/badge.svg)](https://github.com/petrovanna/backend-project-46/actions/workflows/lint.yml)
 
 ### CodeClimate Maintainability status:
 [![Maintainability](https://api.codeclimate.com/v1/badges/0995670fc75577b98ce4/maintainability)](https://codeclimate.com/github/petrovanna/backend-project-46/maintainability)
