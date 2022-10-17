@@ -9,7 +9,7 @@ const genDiff = (obj1, obj2) => {
   const uniqeKeys = _.union(unitedKeys);
   const sortedKeys = _.sortBy(uniqeKeys, [uniqeKeys.key]);
 
-  console.log('1)', sortedKeys);
+  // console.log('1)', sortedKeys);
   const result = {};
 
   sortedKeys.map((key) => {
@@ -32,7 +32,7 @@ const genDiff = (obj1, obj2) => {
     }
     return result;
   });
-  console.log('2)', result);
+  // console.log('2)', result);
 
   const stringResult = JSON.stringify(result, null, ' ');
   const stringResultWithoutQuotes = stringResult.replaceAll('"', '');
