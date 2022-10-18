@@ -38,11 +38,13 @@ const genDiff = (obj1, obj2) => {
   const stringResultWithoutQuotes = stringResult.replaceAll('"', '');
   return (stringResultWithoutQuotes.replaceAll(',', ''));
 }; // gendiff file1.json file2.json
+// gendiff file1.yml file2.yml gendiff file1.yaml file2.yaml
 
 const readFile = (filePath) => {
   const fullPath = path.resolve(process.cwd(), '__fixtures__', filePath);
   const data = readFileSync(fullPath, 'utf-8');
   const dataParse = JSON.parse(data);
+
   return dataParse;
 };
 
