@@ -1,6 +1,5 @@
-import { readFileSync } from 'fs';
 import _ from 'lodash';
-import path from 'path';
+import readFile from './parsers.js';
 
 const genDiff = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -9,7 +8,6 @@ const genDiff = (obj1, obj2) => {
   const uniqeKeys = _.union(unitedKeys);
   const sortedKeys = _.sortBy(uniqeKeys, [uniqeKeys.key]);
 
-  // console.log('1)', sortedKeys);
   const result = {};
 
   sortedKeys.map((key) => {
@@ -32,21 +30,12 @@ const genDiff = (obj1, obj2) => {
     }
     return result;
   });
-  // console.log('2)', result);
 
   const stringResult = JSON.stringify(result, null, ' ');
   const stringResultWithoutQuotes = stringResult.replaceAll('"', '');
   return (stringResultWithoutQuotes.replaceAll(',', ''));
 }; // gendiff file1.json file2.json
-// gendiff file1.yml file2.yml gendiff file1.yaml file2.yaml
-
-const readFile = (filePath) => {
-  const fullPath = path.resolve(process.cwd(), '__fixtures__', filePath);
-  const data = readFileSync(fullPath, 'utf-8');
-  const dataParse = JSON.parse(data);
-
-  return dataParse;
-};
+// gendiff file1.yml file2.yml // gendiff file1.yaml file2.yaml
 
 export default (filepath1, filepath2) => {
   const data1 = readFile(filepath1);
