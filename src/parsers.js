@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 
-const readFile = (filePath) => {
+const parseFile = (filePath) => {
   const fullPath = path.resolve(process.cwd(), '__fixtures__', filePath);
   const data = readFileSync(fullPath, 'utf-8');
   const extension = path.extname(fullPath);
@@ -20,4 +20,4 @@ const readFile = (filePath) => {
       throw new Error(`extension ${extension} is not supported`);
   }
 };
-export default readFile;
+export default parseFile;

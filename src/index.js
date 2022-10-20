@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import readFile from './parsers.js';
+import parseFile from './parsers.js';
 
 const genDiff = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -38,8 +38,8 @@ const genDiff = (obj1, obj2) => {
 // gendiff file1.yml file2.yml // gendiff file1.yaml file2.yaml
 
 export default (filepath1, filepath2) => {
-  const data1 = readFile(filepath1);
-  const data2 = readFile(filepath2);
+  const data1 = parseFile(filepath1);
+  const data2 = parseFile(filepath2);
 
   return genDiff(data1, data2);
 };
