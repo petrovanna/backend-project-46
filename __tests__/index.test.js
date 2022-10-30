@@ -10,9 +10,18 @@ const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filen
 const readFixture = (filename) => readFileSync(getFixturePath(filename), 'utf-8');
 
 test.each([
-  [getFixturePath('file1.json'), getFixturePath('file2.json'), readFixture('expected_file.txt')],
+  [getFixturePath('before_nested.json'), getFixturePath('after_nested.json'), readFixture('expected_nested.txt')],
   // [getFixturePath('file1.yml'), getFixturePath('file2.yml'), readFixture('expected_file.txt')],
   // [getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), readFixture('expected_file.txt')],
-])('must be equal "expected_file.txt"', (filePath1, filePath2, expected) => {
+])('must be equal "expected_nested.txt"', (filePath1, filePath2, expected) => {
   expect(genDiff(filePath1, filePath2)).toBe(expected);
 });
+
+/* test.each([
+  [getFixturePath('before_flat.json'), getFixturePath('after_flat.json'),
+  readFixture('expected_flat.txt')],
+  // [getFixturePath('file1.yml'), getFixturePath('file2.yml'), readFixture('expected_file.txt')],
+  // [getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), readFixture('expected_file.txt')],
+])('must be equal "expected_flat.txt"', (filePath1, filePath2, expected) => {
+  expect(genDiff(filePath1, filePath2)).toBe(expected);
+}); */
