@@ -3,40 +3,52 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
 
-const stringify = (value, replacer = ' ', spacesCount = 1) => {
-  const iter = (currentValue, depth) => {
-    if (!_.isObject(currentValue)) {
-      return `${currentValue}`;
+const stringify = (data, depth) => {
+  if (!_.isObject(data)) {
+    return `${data}`;
+  }
+  const spacesCount = 2;
+  const indentSize = depth * spacesCount;
+  const currentIndent = ' '.repeat(indentSize);
+  const bracketIndent = ' '.repeat(indentSize - spacesCount);
+
+  const lines = data.map((item) => {
+    if (item.status === 'nested') {
+      return `${currentIndent}  ${item.key}: ${stringify(item.children, depth + 1)}`;
     }
-    const indentSize = depth * spacesCount;
-    const currentIndent = replacer.repeat(indentSize);
-    const bracketIndent = replacer.repeat(indentSize - spacesCount);
-    const valueToMassive = Object.entries(currentValue);
+    if (item.status === 'deleted') {
+      return `${currentIndent}- ${item.key}: ${item.value}`;
+    }
+    if (item.status === 'unchanged') {
+      return `${currentIndent}  ${item.key}: ${item.value}`;
+    }
+    if (item.status === 'changed') {
+      return `${currentIndent}- ${item.key}: ${item.value1}\n  + ${item.key}: ${item.value2}`;
+    }
+    if (item.status === 'added') {
+      return `${currentIndent}+ ${item.key}: ${item.value}`;
+    }
+    return lines;
+  });
 
-    const lines = valueToMassive.map(([key, val]) => `${currentIndent}${key}: ${iter(val, depth + 1)}`);
-    const result = ['{', ...lines, `${bracketIndent}}`].join('\n');
+  const result = ['{', ...lines, `${bracketIndent}}`].join('\n');
 
-    return result;
-  };
+  return result;
+}; // gendiff before_flat.json after_flat.json // gendiff before_nested.json after_nested.json
 
-  return iter(value, 1);
-};
-
-// {
-// name: /* ... */,
-// type: 'directory',
-// meta: {}, // Свойства директории
-// children: [/* ... */], // Здесь хранятся дети
-// }
-
-const genDiff = (obj1, obj2) => {
+const getKeys = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const uniqeKeys = _.union(keys1, keys2);
-
   const sortedKeys = _.sortBy(uniqeKeys, [uniqeKeys.key]);
 
-  const tree = sortedKeys.map((key) => {
+  return sortedKeys;
+};
+
+const genDiff = (obj1, obj2) => {
+  const keys = getKeys(obj1, obj2);
+
+  const tree = keys.map((key) => {
     if (!Object.hasOwn(obj2, key)) {
       return { key, value: obj1[key], status: 'deleted' };
     }
@@ -54,13 +66,11 @@ const genDiff = (obj1, obj2) => {
     return { key, value: obj1[key], status: 'unchanged' };
   });
 
-  return tree;
-  // const stringResult = stringify(tree, ' ', 2);
+  // return tree;
+  const stringResult = stringify(tree, 1);
 
-  // return stringResult;
+  return stringResult;
 };
-
-// gendiff file1.json file2.json // gendiff file1.yml file2.yml // gendiff file1.yaml file2.yaml
 
 const getData = (filePath) => {
   const fullPath = path.resolve(process.cwd(), '__fixtures__', filePath);
