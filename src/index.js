@@ -3,38 +3,56 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
 
-const stringify = (data, depth) => {
-  if (!_.isObject(data)) {
-    return `${data}`;
-  }
-  const spacesCount = 2;
-  const indentSize = depth * spacesCount;
-  const currentIndent = ' '.repeat(indentSize);
-  const bracketIndent = ' '.repeat(indentSize - spacesCount);
+/* const stringify = (value) => {
+  const result = JSON.stringify(value, null, ' ');
+  const resultWithoutQuotes = result.replaceAll('"', '');
 
+  return resultWithoutQuotes.replaceAll(',', '');
+}; */
+
+const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2);
+
+const getBracketIndent = (depth, spacesCount = 2) => ' '.repeat(depth * spacesCount - spacesCount);
+
+const stringify = (value, depth) => {
+  if (typeof (value) !== 'object' || value === null) {
+    return String(value);
+  }
+  const arrayOfValue = Object.entries(value);
+  const lines = arrayOfValue.map(([key, val]) => `${getIndent(depth + 1)}  ${key}: ${stringify(val, depth + 1)}`);
+  const result = ['{', ...lines, `${getIndent(depth)}  }`].join('\n');
+
+  return result;
+};
+
+const stylish = (data, depth) => {
+  /* if (!_.isObject(data)) {
+    return `${data}`;
+  } */
   const lines = data.map((item) => {
-    if (item.status === 'nested') {
-      return `${currentIndent}  ${item.key}: ${stringify(item.children, depth + 1)}`;
+    if (item.type === 'nested') {
+      return `${getIndent(depth)}  ${item.key}: ${stringify(item.children, depth + 1)}`;
     }
-    if (item.status === 'deleted') {
-      return `${currentIndent}- ${item.key}: ${item.value}`;
+    if (item.type === 'deleted') {
+      return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
     }
-    if (item.status === 'unchanged') {
-      return `${currentIndent}  ${item.key}: ${item.value}`;
+    if (item.type === 'unchanged') {
+      return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
     }
-    if (item.status === 'changed') {
-      return `${currentIndent}- ${item.key}: ${item.value1}\n  + ${item.key}: ${item.value2}`;
+    if (item.type === 'changed') {
+      return `${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
     }
-    if (item.status === 'added') {
-      return `${currentIndent}+ ${item.key}: ${item.value}`;
+    if (item.type === 'added') {
+      return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
     }
     return lines;
   });
 
-  const result = ['{', ...lines, `${bracketIndent}}`].join('\n');
+  const result = ['{', ...lines, `${getBracketIndent(depth)}}`].join('\n');
 
   return result;
 }; // gendiff before_flat.json after_flat.json // gendiff before_nested.json after_nested.json
+// gendiff before_nested.yml after_nested.yml
 
 const getKeys = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -50,24 +68,24 @@ const genDiff = (obj1, obj2) => {
 
   const tree = keys.map((key) => {
     if (!Object.hasOwn(obj2, key)) {
-      return { key, value: obj1[key], status: 'deleted' };
+      return { key, value: obj1[key], type: 'deleted' };
     }
     if (!Object.hasOwn(obj1, key)) {
-      return { key, value: obj2[key], status: 'added' };
+      return { key, value: obj2[key], type: 'added' };
     }
     if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-      return { key, children: genDiff(obj1[key], obj2[key]), status: 'nested' };
+      return { key, children: genDiff(obj1[key], obj2[key]), type: 'nested' };
     }
     if (obj1[key] !== obj2[key]) {
       return {
-        key, value1: obj1[key], value2: obj2[key], status: 'changed',
+        key, value1: obj1[key], value2: obj2[key], type: 'changed',
       };
     }
-    return { key, value: obj1[key], status: 'unchanged' };
+    return { key, value: obj1[key], type: 'unchanged' };
   });
 
   // return tree;
-  const stringResult = stringify(tree, 1);
+  const stringResult = stylish(tree, 1);
 
   return stringResult;
 };
