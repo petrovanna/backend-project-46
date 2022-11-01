@@ -2,7 +2,7 @@ import { test, expect } from '@jest/globals';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
-import genDiff from '../src/index.js';
+import genDiff, { stylish } from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,7 +16,7 @@ test.each([
   [getFixturePath('before_nested.yaml'), getFixturePath('after_nested.yaml'),
   readFixture('expected_nested.txt')], */
 ])('must be equal "expected_nested.txt"', (filePath1, filePath2, expected) => {
-  expect(genDiff(filePath1, filePath2)).toBe(expected);
+  expect(stylish((genDiff(filePath1, filePath2)), 1)).toBe(expected);
 });
 
 /* test.each([
