@@ -3,16 +3,13 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
 
-/* const stringify = (value) => {
-  const result = JSON.stringify(value, null, ' ');
-  const resultWithoutQuotes = result.replaceAll('"', '');
+/* const indentSize = depth * spacesCount;
+const currentIndent = ' '.repeat(indentSize);
+const bracketIndent = ' '.repeat(indentSize - spacesCount); */
 
-  return resultWithoutQuotes.replaceAll(',', '');
-}; */
+const getIndent = (depth, spacesCount = 4) => ' '.repeat((depth * spacesCount) - 2);
 
-const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2);
-
-const getBracketIndent = (depth, spacesCount = 2) => ' '.repeat(depth * spacesCount - spacesCount);
+const getBracketIndent = (depth, spacesCount = 2) => ' '.repeat(depth * spacesCount);
 
 const stringify = (value, depth) => {
   if (typeof (value) !== 'object' || value === null) {
@@ -25,13 +22,19 @@ const stringify = (value, depth) => {
   return result;
 };
 
-const stylish = (data, depth) => {
-  /* if (!_.isObject(data)) {
-    return `${data}`;
-  } */
+export const stylish = (data, depth) => {
+  // console.log('depth', depth);
   const lines = data.map((item) => {
     if (item.type === 'nested') {
-      return `${getIndent(depth)}  ${item.key}: ${stringify(item.children, depth + 1)}`;
+      // const arrayOfItem = Object.entries(item);
+
+      return `${getIndent(depth)}  ${item.key}: ${stringify((stylish(item.children, depth + 1)), depth)}`;
+
+      /* const babies = item.children.map((child) =>
+      `${getIndent(depth + 1)}  ${child.key}: ${stringify(child.value, depth + 1)}`);
+
+      return `${getIndent(depth)}  ${item.key}: ${['{', ...babies,
+      `${getBracketIndent(depth)} }`].join('\n')}`; */
     }
     if (item.type === 'deleted') {
       return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
@@ -84,10 +87,10 @@ const genDiff = (obj1, obj2) => {
     return { key, value: obj1[key], type: 'unchanged' };
   });
 
-  // return tree;
-  const stringResult = stylish(tree, 1);
+  return tree;
+  // const stringResult = stylish(tree, 1);
 
-  return stringResult;
+  // return stringResult;
 };
 
 const getData = (filePath) => {
