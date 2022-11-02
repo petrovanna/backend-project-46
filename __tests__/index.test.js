@@ -15,5 +15,5 @@ test.each([
   [getFixturePath('before_nested.yml'), getFixturePath('after_nested.yml'), readFixture('expected_nested.txt')],
   [getFixturePath('before_nested.yaml'), getFixturePath('after_nested.yaml'), readFixture('expected_nested.txt')],
 ])('must be equal "expected_nested.txt"', (filePath1, filePath2, expected) => {
-  expect(stylish((genDiff(filePath1, filePath2)), 1)).toBe(expected);
+  expect(stylish((genDiff(filePath1, filePath2)))).toBe(expected);
 });

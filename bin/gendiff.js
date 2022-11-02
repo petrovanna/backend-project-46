@@ -7,10 +7,10 @@ import stylish from '../src/stylish.js';
 program
   .description('Compares two configuration files and shows a difference.')
   .option('-V, --version', 'output the version number')
-  .option('-f, --format <type>', 'output format')
+  .option('-f, --format <type>', 'output format', 'stylish')
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2) => {
-    console.log(stylish(gendiff(filepath1, filepath2), 1));
+    console.log(stylish(gendiff(filepath1, filepath2, program.opts().format)));
   });
 
 program.parse();
