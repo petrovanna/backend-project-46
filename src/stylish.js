@@ -13,7 +13,7 @@ const stringify = (value, depth) => {
   return result;
 };
 
-const stylish = (data, depth) => {
+const stylish = (data, depth = 1) => {
   const lines = data.map((item) => {
     if (item.type === 'nested') {
       return `${getIndent(depth)}  ${item.key}: ${stringify((stylish(item.children, depth + 1)), depth)}`;
