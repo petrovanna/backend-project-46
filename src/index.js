@@ -3,38 +3,27 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
 
-/* const indentSize = depth * spacesCount;
-const currentIndent = ' '.repeat(indentSize);
-const bracketIndent = ' '.repeat(indentSize - spacesCount); */
+/* const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2);
 
-const getIndent = (depth, spacesCount = 4) => ' '.repeat((depth * spacesCount) - 2);
-
-const getBracketIndent = (depth, spacesCount = 2) => ' '.repeat(depth * spacesCount);
+const getBracketIndent = (depth, spacesCount = 4) => ' '.repeat((depth * spacesCount) - 4);
 
 const stringify = (value, depth) => {
   if (typeof (value) !== 'object' || value === null) {
     return String(value);
   }
   const arrayOfValue = Object.entries(value);
-  const lines = arrayOfValue.map(([key, val]) => `${getIndent(depth + 1)}  ${key}: ${stringify(val, depth + 1)}`);
+  const lines = arrayOfValue.map(([key, val]) =>
+  `${getIndent(depth + 1)}  ${key}: ${stringify(val, depth + 1)}`);
   const result = ['{', ...lines, `${getIndent(depth)}  }`].join('\n');
 
   return result;
 };
 
 export const stylish = (data, depth) => {
-  // console.log('depth', depth);
   const lines = data.map((item) => {
     if (item.type === 'nested') {
-      // const arrayOfItem = Object.entries(item);
-
-      return `${getIndent(depth)}  ${item.key}: ${stringify((stylish(item.children, depth + 1)), depth)}`;
-
-      /* const babies = item.children.map((child) =>
-      `${getIndent(depth + 1)}  ${child.key}: ${stringify(child.value, depth + 1)}`);
-
-      return `${getIndent(depth)}  ${item.key}: ${['{', ...babies,
-      `${getBracketIndent(depth)} }`].join('\n')}`; */
+      return `${getIndent(depth)}  ${item.key}:
+      ${stringify((stylish(item.children, depth + 1)), depth)}`;
     }
     if (item.type === 'deleted') {
       return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
@@ -43,7 +32,9 @@ export const stylish = (data, depth) => {
       return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
     }
     if (item.type === 'changed') {
-      return `${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
+      return `${getIndent(depth)}- ${item.key}:
+${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}:
+${stringify(item.value2, depth)}`;
     }
     if (item.type === 'added') {
       return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
@@ -55,7 +46,7 @@ export const stylish = (data, depth) => {
 
   return result;
 }; // gendiff before_flat.json after_flat.json // gendiff before_nested.json after_nested.json
-// gendiff before_nested.yml after_nested.yml
+// gendiff before_nested.yml after_nested.yml */
 
 const getKeys = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -88,9 +79,6 @@ const genDiff = (obj1, obj2) => {
   });
 
   return tree;
-  // const stringResult = stylish(tree, 1);
-
-  // return stringResult;
 };
 
 const getData = (filePath) => {
