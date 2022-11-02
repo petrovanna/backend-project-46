@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
-import stylish from './stylish.js';
 
 const getKeys = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
