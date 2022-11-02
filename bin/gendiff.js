@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import gendiff, { stylish } from '../src/index.js';
+import gendiff from '../src/index.js';
+import stylish from '../src/stylish.js';
 
 program
   .description('Compares two configuration files and shows a difference.')
