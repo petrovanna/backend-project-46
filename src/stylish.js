@@ -2,7 +2,7 @@ const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2
 
 const getBracketIndent = (depth, spacesCount = 4) => ' '.repeat((depth * spacesCount) - 4);
 
-const stringify = (value, depth) => {
+export const stringify = (value, depth) => {
   if (typeof (value) !== 'object' || value === null) {
     return String(value);
   }
@@ -41,3 +41,5 @@ export default stylish;
 // gendiff before_flat.json after_flat.json
 // gendiff before_nested.json after_nested.json
 // gendiff before_nested.yml after_nested.yml
+// gendiff -f stylish before_nested.json after_nested.json
+// gendiff --format stylish before_nested.json after_nested.json
