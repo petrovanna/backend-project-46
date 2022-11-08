@@ -25,3 +25,11 @@ test.each([
 ])('must be equal "expected_plain.txt"', (filePath1, filePath2, expected) => {
   expect(formater(genDiff(filePath1, filePath2), 'plain')).toBe(expected);
 });
+
+test.each([
+  [getFixturePath('before_nested.json'), getFixturePath('after_nested.json'), readFixture('expected_json.txt')],
+  [getFixturePath('before_nested.yml'), getFixturePath('after_nested.yml'), readFixture('expected_json.txt')],
+  [getFixturePath('before_nested.yaml'), getFixturePath('after_nested.yaml'), readFixture('expected_json.txt')],
+])('must be equal "expected_json.txt"', (filePath1, filePath2, expected) => {
+  expect(formater(genDiff(filePath1, filePath2), 'json')).toBe(expected);
+});
