@@ -15,24 +15,21 @@ export const stringify = (value, depth) => {
 
 const stylish = (data, depth = 1) => {
   const lines = data.map((item) => {
-    if (item.type === 'nested') {
-      return `${getIndent(depth)}  ${item.key}: ${stringify((stylish(item.children, depth + 1)), depth)}`;
+    switch (item.type) {
+      case 'nested':
+        return `${getIndent(depth)}  ${item.key}: ${stringify((stylish(item.children, depth + 1)), depth)}`;
+      case 'deleted':
+        return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
+      case 'unchanged':
+        return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
+      case 'changed':
+        return `${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
+      case 'added':
+        return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
+      default:
+        throw new Error(`type ${item.type} is not supported`);
     }
-    if (item.type === 'deleted') {
-      return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
-    }
-    if (item.type === 'unchanged') {
-      return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
-    }
-    if (item.type === 'changed') {
-      return `${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
-    }
-    if (item.type === 'added') {
-      return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
-    }
-    return lines;
   });
-
   const result = ['{', ...lines, `${getBracketIndent(depth)}}`].join('\n');
 
   return result;

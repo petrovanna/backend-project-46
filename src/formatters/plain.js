@@ -16,24 +16,21 @@ const plain = (data, copyPath = '') => {
   const lines = data.map((item) => {
     const path = `${copyPath}${item.key}`;
 
-    if (item.type === 'nested') {
-      return `${plain(item.children, `${path}.`)}`;
+    switch (item.type) {
+      case 'nested':
+        return `${plain(item.children, `${path}.`)}`;
+      case 'deleted':
+        return `Property '${path}' was removed`;
+      case 'unchanged':
+        return [];
+      case 'changed':
+        return `Property '${path}' was updated. From ${stringify(item.value1)} to ${stringify(item.value2)}`;
+      case 'added':
+        return `Property '${path}' was added with value: ${stringify(item.value)}`;
+      default:
+        throw new Error(`type ${item.type} is not supported`);
     }
-    if (item.type === 'deleted') {
-      return `Property '${path}' was removed`;
-    }
-    if (item.type === 'unchanged') {
-      return [];
-    }
-    if (item.type === 'changed') {
-      return `Property '${path}' was updated. From ${stringify(item.value1)} to ${stringify(item.value2)}`;
-    }
-    if (item.type === 'added') {
-      return `Property '${path}' was added with value: ${stringify(item.value)}`;
-    }
-    return lines;
   });
-
   const result = [...lines.flat()].join('\n');
 
   return result;
