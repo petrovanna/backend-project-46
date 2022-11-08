@@ -14,6 +14,3 @@ const formater = (data, format = 'stylish') => {
   }
 };
 export default formater;
-// gendiff -f stylish before_nested.json after_nested.json
-// gendiff -f plain before_nested.json after_nested.json
-// gendiff -f json before_nested.json after_nested.json
