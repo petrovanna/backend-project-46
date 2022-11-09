@@ -29,7 +29,7 @@ Welcome! Let me introduce you difference calculator. This program comparison fla
 ### Installation:
 Make sure you have Node.js version 14 or higher
 
-git clone ([git@github.com:petrovanna/backend-project-46.git](https://github.com/petrovanna/backend-project-46))
+git clone [git@github.com:petrovanna/backend-project-46.git](https://github.com/petrovanna/backend-project-46)
 
 npm ci
 
