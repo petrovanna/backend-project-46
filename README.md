@@ -26,10 +26,10 @@ Welcome! Let me introduce you difference calculator. This program comparison fla
 ### Comparison of nested files in JSON format:
 [![asciicast](https://asciinema.org/a/Kyu8XGgQS4xiOG0uhvnlNlfvV.svg)](https://asciinema.org/a/Kyu8XGgQS4xiOG0uhvnlNlfvV)
 
-Installation:
+### Installation:
 Make sure you have Node.js version 14 or higher
 
-git clone git@github.com:petrovanna/backend-project-46.git
+### git clone git@github.com:petrovanna/backend-project-46.git
 
 npm ci
 
