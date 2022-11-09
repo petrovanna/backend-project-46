@@ -27,10 +27,14 @@ Welcome! Let me introduce you difference calculator. This program comparison fla
 [![asciicast](https://asciinema.org/a/Kyu8XGgQS4xiOG0uhvnlNlfvV.svg)](https://asciinema.org/a/Kyu8XGgQS4xiOG0uhvnlNlfvV)
 
 ### Installation:
-Make sure you have Node.js version 14 or higher
+Make sure you have Node.js version 16 or higher
 
 git clone [git@github.com:petrovanna/backend-project-46.git](https://github.com/petrovanna/backend-project-46)
 
-npm ci
+cd backend-project-46
+
+make install
 
 npm link
+
+[![asciicast](https://asciinema.org/a/uD1H6EOkJpiuprE1WwdGdHOtD.svg)](https://asciinema.org/a/uD1H6EOkJpiuprE1WwdGdHOtD)
