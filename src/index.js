@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
+import formater from './formatters/index.js';
 
 const getKeys = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -49,7 +50,7 @@ const getExtension = (filePath) => {
   return extension[1];
 };
 
-export default (filepath1, filepath2) => {
+export default (filepath1, filepath2, formatName) => {
   const data1 = getData(filepath1);
   const data2 = getData(filepath2);
 
@@ -59,5 +60,5 @@ export default (filepath1, filepath2) => {
   const parseData1 = parseFile(extData1, data1);
   const parseData2 = parseFile(extData2, data2);
 
-  return (genDiff(parseData1, parseData2));
+  return formater(genDiff(parseData1, parseData2), formatName);
 };
