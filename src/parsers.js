@@ -1,14 +1,14 @@
 import yaml from 'js-yaml';
 
-const parseFile = (getExtension, getData) => {
-  switch (getExtension) {
+const parseFile = (dataFormat, data) => {
+  switch (dataFormat) {
     case 'json':
-      return JSON.parse(getData);
+      return JSON.parse(data);
     case 'yml':
     case 'yaml':
-      return yaml.load(getData);
+      return yaml.load(data);
     default:
-      throw new Error(`extension ${getExtension} is not supported`);
+      throw new Error(`extension ${dataFormat} is not supported`);
   }
 };
 export default parseFile;
