@@ -9,7 +9,7 @@ const getKeys = (obj1, obj2) => {
   return sortedKeys;
 };
 
-const genDiff = (obj1, obj2) => {
+const buildTree = (obj1, obj2) => {
   const keys = getKeys(obj1, obj2);
 
   const tree = keys.map((key) => {
@@ -20,7 +20,7 @@ const genDiff = (obj1, obj2) => {
       return { key, value: obj2[key], type: 'added' };
     }
     if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-      return { key, children: genDiff(obj1[key], obj2[key]), type: 'nested' };
+      return { key, children: buildTree(obj1[key], obj2[key]), type: 'nested' };
     }
     if (obj1[key] !== obj2[key]) {
       return {
@@ -32,4 +32,4 @@ const genDiff = (obj1, obj2) => {
 
   return tree;
 };
-export default genDiff;
+export default buildTree;

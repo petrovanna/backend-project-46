@@ -1,9 +1,8 @@
-// import _ from 'lodash';
 import { readFileSync } from 'fs';
 import path from 'path';
 import parseFile from './parsers.js';
 import formater from './formatters/index.js';
-import genDiff from './genDiff.js';
+import buildTree from './buildTree.js';
 
 const getData = (filePath) => {
   const fullPath = path.resolve(process.cwd(), filePath);
@@ -28,5 +27,5 @@ export default (filepath1, filepath2, formatName) => {
   const parseData1 = parseFile(extData1, data1);
   const parseData2 = parseFile(extData2, data2);
 
-  return formater(genDiff(parseData1, parseData2), formatName);
+  return formater(buildTree(parseData1, parseData2), formatName);
 };
